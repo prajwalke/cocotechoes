@@ -1,0 +1,64 @@
+//question number 4
+/*Library - list of members, for each member, maintain a list of books with name, checkout date,
+and return date. Find the average number of days each member keeps the book.
+Please note you need to create random data of say about 10 members with names like
+“Member1”, “Member2” and so on. And for each member add a random number of books
+between 10 and 30. And for each book add random checkoutDate and returnDate.
+  */
+//code
+const members = [];
+const numMembers = 10;
+
+// Create 10 members 
+for (let i = 1; i <= numMembers; i++) {
+  members.push({
+    name: `Member${i}`,
+    books: [],
+  });
+}
+
+members.forEach((member) => {
+  const numBooks = Math.floor(Math.random() *21) + 10;
+  for (let j = 1; j <= numBooks; j++) {
+    const checkoutDate = new Date(Date.now() - Math.random() * 100 * 60 * 60 * 24 * 30);
+    let returnDate;
+
+    if (j === 1) {
+      //  random returnDate
+      returnDate = new Date(checkoutDate.getTime() + Math.random() * 100 * 60 * 60 * 24 * 15);
+    } else {
+      // returnDate based on the previous book's returnDate
+      returnDate = new Date(member.books[j - 2].returnDate.getTime() + Math.random() * 100 * 60 * 60 * 24 * 15);
+    }
+
+    member.books.push({
+      name: `Book${j}`,
+      checkoutDate,
+      returnDate,
+    });
+  }
+});
+
+members.forEach((member) => {
+  let totalDays = 0;
+  member.books.forEach((book) => {
+    const timeDiff = book.returnDate.getTime() - book.checkoutDate.getTime();
+    totalDays += Math.floor(timeDiff / (100 * 60 * 60 * 24));
+  });
+  const averageDays = totalDays / member.books.length;
+  console.log(`${member.name}: Average days = ${averageDays}`);
+});
+
+/*
+console output 
+Member1: Average days = 87.71428571428571
+Member2: Average days = 117.61538461538461
+Member3: Average days = 103.71052631578948
+Member4: Average days = 73.52173913043478
+Member5: Average days = 108.03125
+Member6: Average days = 124.125
+Member7: Average days = 112.08108108108108
+Member8: Average days = 136.6969696969697
+Member9: Average days = 96
+Member10: Average days = 118.54545454545455
+*/
